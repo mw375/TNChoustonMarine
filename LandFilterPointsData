@@ -1,0 +1,28 @@
+import arcpy
+
+inpath = r"E:\0Val_Local\Phase2DataCleaning\3_Filt1_DuplicatesRemoved_SpeedKMPH\WS.gdb"
+arcpy.env.workspace = inpath
+arcpy.env.overwriteOutput = True
+
+outpath = "E:/0Val_Local/Phase2DataCleaning/4_Filt2_LandFilter_ForagingFilter/WS.gdb/"
+
+landshp = "E:/0Val_Local/Phase2DataCleaning/countries_land_polygon.shp"
+
+fcs = arcpy.ListFeatureClasses()
+
+for fc in fcs:
+    print fc
+    arcpy.MakeFeatureLayer_management(fc,'FL')
+    arcpy.SelectLayerByLocation_management('FL','INTERSECT',landshp,None,'NEW_SELECTION','INVERT')
+    arcpy.CopyFeatures_management('FL',outpath+fc)
+
+print 'code completed for input files from: '+inpath
+print 'output files are stored at: '+outpath
+print 'input files:' + str(len(fcs))
+arcpy.env.workspace = outpath
+fcs2 = arcpy.ListFeatureClasses()
+print 'output files:' + str(len(fcs2))
+if str(len(fcs)) == str(len(fcs2)):
+    print 'yes, same amount of input files as output files'
+else:
+    print 'no, different amount of input and output files'
