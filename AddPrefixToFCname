@@ -1,0 +1,4 @@
+for fc in fcs:
+...     if fc.startswith('Mote'):
+...         arcpy.Rename_management(fc,'NOPERMISSION_{}'.format(fc))
+...
