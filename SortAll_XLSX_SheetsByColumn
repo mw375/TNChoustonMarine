@@ -1,0 +1,20 @@
+' Module 2: Sort all imported XLSX sheets by the date column, make sure to change a1:j2, A:J, H, and order as needed
+' a1:j1/A:J is the extent of the data to be sorted
+' H is the column to sort by
+' order = X1Ascending or X1Descending
+
+Sub SortAllSheets()
+   'Updateby Extendoffice 20161216
+   Dim WS      As Worksheet
+   ActiveSheet.Range("a1:j1").Select
+   Selection.Copy
+   On Error Resume Next
+   Application.ScreenUpdating = False
+   For Each WS In Worksheets
+      WS.Columns("A:J").Sort Key1:=WS.Columns("H"), Order1:=xlAscending, Header:=xlYes
+   Next WS
+   ActiveSheet.Range("A1").PasteSpecial Paste:=xlPasteAll
+   Application.ScreenUpdating = True
+End Sub
+
+
