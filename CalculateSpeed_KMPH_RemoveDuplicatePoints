@@ -92,7 +92,7 @@ for fc in fcs2:
 
 fcs2 = arcpy.ListFeatureClasses()
 print 'output files:' + str(len(fcs2))
-if str(len(fcs)*2) == str(len(fcs2)):
+if str(len(fcs)) == str(len(fcs2)):
     print 'yes, same amount of input files as output files'
 else:
     print 'no, different amount of input and output files'
