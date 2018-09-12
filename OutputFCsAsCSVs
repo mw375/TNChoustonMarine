@@ -1,0 +1,16 @@
+import arcpy
+
+inpath = 'E:/0Val_Local/Phase2DataCleaning/Old_PointsData/PhaseII/'
+arcpy.env.workspace = inpath + '{}'.format('BRPE.gdb')
+
+arcpy.env.overwriteOutput = True
+
+fcs = arcpy.ListFeatureClasses()
+
+outpath = 'E:/0Val_Local/Phase2DataCleaning/Old_RawData/BRPE'
+
+
+for fc in fcs:
+    if fc.startswith('Movebank'):
+        newname = fc+'{}'.format('.txt')
+        arcpy.TableToTable_conversion (fc, outpath, newname)
