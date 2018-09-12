@@ -1,0 +1,14 @@
+import arcpy
+
+arcpy.env.workspace = "E:/0Val_Local/Phase2DataCleaning/RawData/PhaseI/PointsData/OSPR.gdb"
+
+fcs = arcpy.ListFeatureClasses()
+
+print fcs
+
+for fc in fcs:
+    if fc.startswith('test'):
+        newname= 'MarkMartell_Audubon_{0}'.format(fc)
+        arcpy.Rename_management(fc,newname)
+
+print fcs
