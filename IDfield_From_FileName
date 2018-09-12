@@ -1,0 +1,11 @@
+import arcpy
+
+arcpy.env.workspace = r"E:\0TracksDatabase_MASTER\OSPR.gdb"
+fcs = arcpy.ListFeatureClasses()
+
+for fc in fcs:
+    if 'Drexel' in fc and 'NULLGEOM' not in fc:
+        idnum = str(fc[:-9])
+        print idnum
+        arcpy.AddField_management(fc,'ID_final','TEXT')
+        arcpy.CalculateField_management(fc,'ID_final','"'+idnum+'"','PYTHON')
