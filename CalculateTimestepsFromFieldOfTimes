@@ -1,0 +1,29 @@
+import arcpy, math
+from arcpy import da
+
+arcpy.env.workspace = ''
+fcs = arcpy.ListFeatureClasses()
+
+for fc in fcs:
+    if fc.startswith(''): #do this since data from different sources likely has different field names or formats
+        #STEP ONE - CALCULATE TIME DELTA IN HOURS
+        vertices = fc
+        firstRow = True
+        arcpy.AddField_management(fc,"TimeDelta","TEXT")
+        arcpy.AddField_management(fc,"TimeDelta2","DOUBLE")
+
+        #Calculate TimeDelta as a text field with format x days, hh:mm:ss as timestep (string field)
+        # ***UPDATE THESE FIELD NAMES EACH RUN*** - should be id#, timefield, timedelta
+        with arcpy.da.UpdateCursor(vertices,['ObjectID','DateTime2','TimeDelta']) as cursor:
+            for row in cursor:
+                gap2 = row[1]
+                if firstRow == True:
+                    gap1 = gap2
+                    firstRow = False
+                    continue
+                row[2] = str(gap2 - gap2)
+                gap1 = gap2
+                cursor.updateRow(row)
+        #Calculate TimeDelta2 as a double field with format x.xxxx (hours) as timestep
+        arcpy.CalculateField_management(fc,"TimeDelta2", expression="get_hour( !TimeDelta!)", expression_type="PYTHON_9.3", code_block="def get_hour(time_str):\n    if 'days,' in time_str:\n        days, end = time_str.split('days,')\n        h,m,s = end.split(':')\n        return float(days)*24+float(h)+float(m)/60+float(s)/3600\n    elif 'day,' in time_str:\n        day, end = time_str.split('day,')\n        h,m,s = end.split(':')\n        return float(day)*24+float(h)+float(m)/60+float(s)/3600\n    else:\n        h, m, s = time_str.split(':')\n        return float(h)+float(m)/60+float(s)/3600")
+
