@@ -1,0 +1,10 @@
+import arcpy
+
+arcpy.env.workspace = r"E:\Cuba\0Connectivity_StartEndPts\WS.gdb"
+fcs = arcpy.ListFeatureClasses()
+for fc in fcs:
+    print(fc)
+    arcpy.AddField_management(fc,'StartEnd','SHORT')
+    arcpy.CalculateField_management(fc,'StartEnd','0')
+
+print('code is done')
