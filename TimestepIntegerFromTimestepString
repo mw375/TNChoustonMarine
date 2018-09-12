@@ -1,0 +1,12 @@
+def get_hour(time_str):
+...     if 'days,' in time_str:
+...         days, end = time_str.split('days,')
+...         h,m,s = end.split(':')
+...         return float(days)*24+float(h)+float(m)/60+float(s)/3600
+...     elif 'day,' in time_str:
+...         day, end = time_str.split('day,')
+...         h,m,s = end.split(':')
+...         return float(day)*24+float(h)+float(m)/60+float(s)/3600
+...     else:
+...         h, m, s = time_str.split(':')
+...         return float(h)+float(m)/60+float(s)/3600
