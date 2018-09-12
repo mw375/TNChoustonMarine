@@ -1,0 +1,12 @@
+import arcpy
+
+arcpy.env.workspace = 'E:/0Val_Local/Phase2DataCleaning/PointsData/PhaseII/BM.gdb'
+
+fcs = arcpy.ListFeatureClasses()
+
+print fcs
+
+for fc in fcs:
+...     if fc.endswith('_1'):
+...         fcnew = fc[:-2]
+...         arcpy.Rename_management(fc,fcnew)
