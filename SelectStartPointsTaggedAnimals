@@ -1,0 +1,14 @@
+#Select start points of tagged animals
+
+import arcpy
+
+arcpy.env.workspace = r"E:\BluewaysConservation\BullSharkTaggingLocations\GulfSturgeonTaggingLocations.gdb"
+outpath = "E:/BluewaysConservation/BullSharkTaggingLocations/GulfSturgeonTaggingLocations.gdb/"
+
+fcs = arcpy.ListFeatureClasses()
+
+for fc in fcs:
+    print fc
+    FL = arcpy.MakeFeatureLayer_management(fc)
+    arcpy.SelectLayerByAttribute_management(FL,'NEW_SELECTION','OBJECTID=1')
+    arcpy.CopyFeatures_management(FL,outpath+"TaggingLocations_"+fc)
