@@ -1,0 +1,34 @@
+# Import arcpy module
+import arcpy
+
+arcpy.env.overwriteOutput = True
+
+# Load required toolboxes
+arcpy.ImportToolbox("Model Functions")
+
+# Script arguments
+v_Name__Norm = arcpy.GetParameterAsText(0)
+if v_Name__Norm == '#' or not v_Name__Norm:
+    v_Name__Norm = "E:\\0Val_Local\\Phase2DataCleaning\\7_BrownianBridgesInputsAndResults\\BFT_Normalized_Stacked.gdb\\%Name%_Norm" # provide a default value if unspecified
+
+# Local variables:
+BFT_StudyArea_gdb__2_ = "E:\\0Val_Local\\Phase2DataCleaning\\7_BrownianBridgesInputsAndResults\\BFT_StudyArea.gdb"
+BBMMGrid_BFT_StudyArea_2_03 = "E:\\0Val_Local\\Phase2DataCleaning\\7_BrownianBridgesInputsAndResults\\BFT_StudyArea.gdb\\BBMMGrid_BFT_StudyArea_2_12"
+MigratorySpeciesProjectBoundary_Lambert = "E:\\0Val_Local\Phase2DataCleaning\\7_BrownianBridgesInputsAndResults\\BrownianBridges_Results.gdb\\MigratorySpeciesProjectBoundary_Lambert"
+MaxVal = "E:\\0Val_Local\\Phase2DataCleaning\\7_BrownianBridgesInputsAndResults\\BFT_Normalized_Stacked.gdb\\MaxVal"
+Value = MaxVal
+Name = "BBMMGrid_BFT_StudyArea_2_12"
+BFT_StudyArea_gdb = "E:\\0Val_Local\\Phase2DataCleaning\\7_BrownianBridgesInputsAndResults\\BFT_StudyArea.gdb"
+
+# Process: Iterate Rasters
+arcpy.IterateRasters_mb(BFT_StudyArea_gdb__2_, "", "", "NOT_RECURSIVE")
+
+# Process: Zonal Statistics as Table
+arcpy.gp.ZonalStatisticsAsTable_sa(MigratorySpeciesProjectBoundary_Lambert, "OBJECTID", BBMMGrid_BFT_StudyArea_2_03, MaxVal, "DATA", "MAXIMUM")
+
+# Process: Get Field Value
+arcpy.GetFieldValue_mb(MaxVal, "MAX", "Double", "0")
+
+# Process: Raster Calculator
+arcpy.gp.RasterCalculator_sa("\"%BBMMGrid_BFT_StudyArea_2_03%\"/float(%Value%)", v_Name__Norm)
+
