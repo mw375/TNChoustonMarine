@@ -1,0 +1,16 @@
+#THIS SCRIPT HAS TO BE RUN IN THE ARCMAP PYTHON WINDOW
+
+speciescode = "WS"
+corridor = "E:/0TracksDatabase_MASTER/Lines/1Corridors_KDE_GulfOnly_NewHrefs.gdb/{}_norm".format(speciescode)
+
+outpath = "E:/0MARXAN_2018_FullRun/ConservationFeatures.gdb/"
+MarxanPUs = "E:/0MARXAN_2018_FullRun/PlanningUnits.gdb/MARXAN_PU_hexagons_100km2_GOMonly"
+
+meanSPECIESinPU = arcpy.gp.ZonalStatisticsAsTable_sa(MarxanPUs, "PU_ID", corridor, outpath+speciescode, "DATA", "MEAN")
+
+arcpy.AddField_management(MarxanPUs,speciescode,"DOUBLE")
+
+#*********NEXT ADD JOIN TO THE MarxanPUs file with the meanSPECIESinPU file based on the PU_ID field
+#THEN SET speciescode field of MarxanPUs file = MEAN field in meanSPECIESinPU file
+#Remove join
+#Replace <NULL> values in speciescode field with 0s
