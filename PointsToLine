@@ -1,0 +1,16 @@
+import arcpy
+
+arcpy.env.overwriteOutput = True
+
+speciescode = 'OSPR' #****change species code for each run*******
+
+arcpy.env.workspace = r"E:\0TracksDatabase_MASTER\{}.gdb".format(speciescode)
+outpath = "E:/0TracksDatabase_MASTER/Lines/{}.gdb/".format(speciescode)
+
+fcs = arcpy.ListFeatureClasses()
+
+for fc in fcs:
+    print(fc)
+    arcpy.AddField_management(fc,'SortField','SHORT')
+    arcpy.CalculateField_management(fc,'SortField','OBJECTID')
+    arcpy.PointsToLine_management(fc,outpath+fc,None,'SortField')
